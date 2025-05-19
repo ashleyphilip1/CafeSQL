@@ -68,7 +68,7 @@ order by Amount_sold asc
 Limit 10;
 
 
--- customer loyalty
+-- product loyalty
 SELECT 
     product_detail, 
     store_location, 
@@ -79,15 +79,7 @@ GROUP BY transaction_qty, product_detail, store_location, product_category
 ORDER BY transaction_qty DESC
 LIMIT 10;
 
--- correlation equation
-    SELECT 
-    (SUM(transaction_qty * unit_price) - SUM(transaction_qty) * SUM(unit_price) / COUNT(*)) /
-    (SQRT(SUM(transaction_qty * transaction_qty) - SUM(transaction_qty) * SUM(transaction_qty) / COUNT(*)) * 
-     SQRT(SUM(unit_price * unit_price) - SUM(unit_price) * SUM(unit_price) / COUNT(*))) 
-    AS correlation
-FROM shop;
-
--- Windows
+-- Windows function: total revenue per store
 SELECT distinct
     store_location,
     transaction_date,
@@ -98,16 +90,6 @@ SELECT distinct
 FROM shop
     order by running_total_revenue 
 ;
-
--- product analysis
-SELECT 
-    product_detail, 
-    SUM(transaction_qty) AS total_sold, 
-    AVG(unit_price) OVER () AS avg_unit_price
-FROM shop
-GROUP BY product_detail
-ORDER BY total_sold DESC
-LIMIT 10;
 
 -- correlation between amount sold and unit_price
 select product_detail, unit_price, sum(transaction_qty) as Amount_sold
